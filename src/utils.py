@@ -1,6 +1,5 @@
-
-from os import walk
 from transformers import AutoConfig
+
 
 def label_mapping(model, mode='lb2id'):
     if 'bert-base-uncased-mnli' in model:
@@ -64,7 +63,7 @@ def read_distnli_data(path, model_name, return_label=True):
                 if 'control' in path:
                     label = 'entailment'
                     label = label2idx[label]
-                elif 'intervention' in path:
+                elif 'treatment' in path:
                     label = -1
                 else:
                     raise Exception('Error encountered when generating labels. ')
@@ -76,8 +75,6 @@ def read_distnli_data(path, model_name, return_label=True):
 
 def read_hans_data(path, model_name):
     label2idx = label_mapping(model_name)
-    # data_path = 'data/HANS/heuristics_evaluation_set.txt'
-    # save_path = 'data/HANS/formatted_heuristics_evaluation_set.txt'
     data = []
     with open(path, 'r') as f:
         header = f.readline().strip().split('\t')
@@ -91,37 +88,3 @@ def read_hans_data(path, model_name):
             data.append((row[header.index('sentence1')], row[header.index('sentence2')], label))
     assert len(data) != 0, 'Fail to read data from file'
     return data
-
-
-def model_mapping(model_name):
-    model2full = {
-        'bart-large-mnli': 'facebook/bart-large-mnli',
-        'deberta-v2-xlarge-mnli': 'microsoft/deberta-v2-xlarge-mnli', 
-        'distilbert-base-uncased-mnli': 'typeform/distilbert-base-uncased-mnli', 
-        'nli-distilroberta-base': 'cross-encoder/nli-distilroberta-base', 
-        'roberta-large-mnli': 'roberta-large-mnli', 
-        'xlm-roberta-large-xnli': 'joeddav/xlm-roberta-large-xnli',
-        'distilbart-mnli-12-1': 'valhalla/distilbart-mnli-12-1',
-        'bert-base-uncased-mnli': 'ishan/bert-base-uncased-mnli', 
-        'deberta-base-mnli': 'microsoft/deberta-base-mnli', 
-        'deberta-large-mnli': 'microsoft/deberta-large-mnli',
-        'deberta-xlarge-mnli': 'microsoft/deberta-xlarge-mnli', 
-    }
-    return model2full[model_name] if model_name in model2full else None
-
-
-def _get_acc_from_file(result_dir):
-    acc_list = {}
-    _, _, pred_files = next(walk(result_dir))
-    for pred_file in pred_files:
-        with open(result_dir + pred_file, 'r') as f:
-            acc_score = float(f.readline().strip().split(': ')[1])
-            acc_list[pred_file.split('_')[0].replace('.txt', '')] = acc_score
-    return acc_list
-
-
-if __name__ == '__main__':
-    model_name = "roberta-large-mnli"
-    data_path = "data/distnli/control_2_v3.tsv"
-    data = read_distnli_data(data_path, model_name)
-    print()
