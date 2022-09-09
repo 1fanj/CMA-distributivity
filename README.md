@@ -2,7 +2,7 @@
 Code for [Testing Pre-trained Language Models' Understanding of Distributivty via Causal Mediation Analysis](arxiv)
 
 ## Installation
-This repo is built based on Python (version).
+This repo is built based on Python >=3.8.
 
 The dependencies can be installed by running `pip install -r requirement.txt`.
 
