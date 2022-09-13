@@ -1,5 +1,5 @@
 # CMA-distributivity
-Code for [Testing Pre-trained Language Models' Understanding of Distributivty via Causal Mediation Analysis](arxiv)
+Code for [Testing Pre-trained Language Models' Understanding of Distributivty via Causal Mediation Analysis]([arxiv](https://arxiv.org/abs/2209.04761))
 
 ## Installation
 This repo is built based on Python>=3.8.
